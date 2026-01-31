@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ClientLayout from "./clientLayout";
 
 const pretendard = localFont({
   src: [
@@ -31,7 +32,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.variable} font-sans antialiased`}>
-        {children}
+        <div id='toast-portal'></div>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );

@@ -1,15 +1,23 @@
 'use client'
 
-import Image from "next/image";
 import Button from "@/app/components/common/Button";
+import useAuth from "@/app/hooks/useAuth";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useCallback } from "react";
 
 export default function ExchangeHeader() {
+    const router = useRouter()
     const pathname = usePathname();
+    const { signOut } = useAuth();
 
     const isExchangePage = pathname === '/exchange';
     const isHistoryPage = pathname === '/transactions';
+
+    const handleSignOut = useCallback(() => {
+        signOut()
+        router.push('/login')
+    }, [router, signOut])
 
     return (
         <div id='exchange-header' className='flex w-full h-[60px] items-center justify-between border-b-1 border-gray-200 px-12'>
@@ -24,7 +32,7 @@ export default function ExchangeHeader() {
                     <a href="/exchange" className={isExchangePage ? `text-sm font-bold` : `text-sm text-gray-500`}>환전 하기</a>
                     <a href="/transactions" className={isHistoryPage ? `text-sm font-bold` : `text-sm text-gray-500`}>환전 내역</a>
                 </div>
-                <Button onClick={() => { }} size="sm" color="main">
+                <Button onClick={handleSignOut} size="sm" color="main">
                     <p className='text-[12px]'>Log Out</p>
                 </Button>
             </div>

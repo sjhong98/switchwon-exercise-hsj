@@ -1,24 +1,48 @@
+import { useCookies } from "react-cookie";
+import { errorToast } from "../lib/toast";
+
 interface UseApiProps {
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     body?: any;
 }
 
-export default function useApi({ url, method, body }: UseApiProps) {
+export interface ApiResponse<T> {
+    data: T;
+    status: number;
+}
 
-    const api = async (args: UseApiProps) => {
+export default function useApi() {
+    const [cookies] = useCookies(['accessToken']);
+
+    const api = async <T>(args: UseApiProps): Promise<ApiResponse<T>> => {
         const { url, method, body } = args;
 
         try {
+            console.log('access token', cookies?.accessToken)
+            
             const res = await fetch(`/api/proxy?url=${url}`, {
                 method,
                 body: body ? JSON.stringify(body) : undefined,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${cookies?.accessToken ?? ''}`,
+                },
             });
 
-            return res.json();
+            const result = await res.json();
+
+            if(res.status !== 200) {
+                errorToast(result.message)
+            }
+
+            return {
+                data: result as T,
+                status: res.status,
+            }
         } catch (error) {
-            // 401 에러 시에 로그인으로 라우팅?
-            console.error(error);
+            errorToast(error as string)
+            console.error('API Error: ', error);
             throw error;
         }   
     }

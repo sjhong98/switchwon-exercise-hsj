@@ -7,7 +7,10 @@ export async function GET(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url');
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': req.headers.get('Content-Type') ?? 'application/json',
+      'Authorization': req.headers.get('Authorization') ?? '',
+    },
   });
   // 응답값을 변형하지 않고 그대로 반환
   return new NextResponse(await res.text(), {
@@ -21,7 +24,10 @@ export async function POST(req: NextRequest) {
   const { bodyData } = await req.json();
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': req.headers.get('Content-Type') ?? 'application/json',
+      'Authorization': req.headers.get('Authorization') ?? '',
+    },
     body: bodyData ? JSON.stringify(bodyData) : undefined,
   });
   return new NextResponse(await res.text(), {
@@ -35,7 +41,10 @@ export async function PUT(req: NextRequest) {
   const { bodyData } = await req.json();
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': req.headers.get('Content-Type') ?? 'application/json',
+      'Authorization': req.headers.get('Authorization') ?? '',
+    },
     body: bodyData ? JSON.stringify(bodyData) : undefined,
   });
   return new NextResponse(await res.text(), {
@@ -48,7 +57,10 @@ export async function DELETE(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url');
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': req.headers.get('Content-Type') ?? 'application/json',
+      'Authorization': req.headers.get('Authorization') ?? '',
+    },
   });
   return new NextResponse(await res.text(), {
     status: res.status,
