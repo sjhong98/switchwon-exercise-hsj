@@ -11,13 +11,7 @@ export default function ExchangeLayout({ children }: { children: React.ReactNode
     const { checkSession } = useAuth();
 
     useEffect(() => {
-        (async () => {
-            const session: boolean = await checkSession()
-            if(!session) {
-                router.push('/login')
-                return
-            }
-        })()
+        checkSession().catch(() => router.push('/login'))
     }, [pathname])
 
     return (

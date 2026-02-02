@@ -57,7 +57,7 @@ export default function Dropdown(props: DropdownProps) {
                 </div>
             </div>
             <div
-                className="flex flex-col absolute py-2 rounded-[16px] border border-gray-100 bg-white overflow-hidden duration-300"
+                className="flex flex-col absolute py-2 rounded-[16px] border border-gray-100 bg-white overflow-hidden duration-200 z-[9999]"
                 style={{
                     height: isOpen ? `${itemList.length * (itemRef.current?.clientHeight ?? 40) + 16}px` : '0px',
                     opacity: isOpen ? 1 : 0
@@ -65,7 +65,7 @@ export default function Dropdown(props: DropdownProps) {
             >
                 {
                     itemList.map((item, index) => (
-                        <div key={index} ref={itemRef} className="flex items-center gap-2 py-2 px-4 hover:bg-gray-50 duration-100 cursor-pointer" onClick={() => handleSelect(index)}>
+                        <div key={index} ref={itemRef} className="flex items-center gap-2 py-2 px-4 hover:bg-gray-50 duration-200 cursor-pointer" onClick={() => handleSelect(index)}>
                             {item}
                         </div>
                     ))

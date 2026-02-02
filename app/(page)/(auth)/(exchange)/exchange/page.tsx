@@ -1,7 +1,7 @@
 'use client'
 
 import ExchangeTitle from "@/app/components/exchange/common/Title"
-import ExchangeDashboard from "@/app/components/exchange/exchange/Dashboard"
+import ExchangeDashboard from "@/app/components/exchange/dashboard/Ui"
 
 export default function ExchangePageComponent() {
     return (

@@ -5,6 +5,7 @@ import useAuth from "@/app/hooks/useAuth";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
+import P from "@/app/components/common/P";
 
 export default function ExchangeHeader() {
     const router = useRouter()
@@ -24,16 +25,16 @@ export default function ExchangeHeader() {
             {/* Logo */}
             <div className='flex items-center gap-2'>
                 <Image src="/assets/logo.svg" alt="logo" width={30} height={30} />
-                <h1 className='text-2xl font-bold'>Exchange App</h1>
+                <P element="h1" className='text-2xl font-bold'>Exchange App</P>
             </div>
 
             <div className='flex items-center gap-16'>
-                <div className='flex items-center gap-12'>
-                    <a href="/exchange" className={isExchangePage ? `text-sm font-bold` : `text-sm text-gray-500`}>환전 하기</a>
-                    <a href="/transactions" className={isHistoryPage ? `text-sm font-bold` : `text-sm text-gray-500`}>환전 내역</a>
+                <div className='flex items-center gap-12 overflow-hidden'>
+                    <a href="/exchange" className={`${isExchangePage ? 'text-sm font-bold' : 'text-sm text-gray-500'} min-w-0 overflow-hidden text-ellipsis whitespace-nowrap`}>환전 하기</a>
+                    <a href="/transactions" className={`${isHistoryPage ? `text-sm font-bold` : `text-sm text-gray-500`} min-w-0 overflow-hidden text-ellipsis whitespace-nowrap`}>환전 내역</a>
                 </div>
-                <Button onClick={handleSignOut} size="sm" color="main">
-                    <p className='text-[12px]'>Log Out</p>
+                <Button onClick={handleSignOut} size="sm" color="main" textClassName='text-[12px]'>
+                    Log Out
                 </Button>
             </div>
         </div>

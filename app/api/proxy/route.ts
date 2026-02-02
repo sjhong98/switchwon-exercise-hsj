@@ -5,7 +5,12 @@ const BASE_URL = 'https://exchange-example.switchflow.biz';
 export async function GET(req: NextRequest) {
   // url은 parameter로, body는 body로 받는 통일 구조
   const url = req.nextUrl.searchParams.get('url');
-  const res = await fetch(`${BASE_URL}${url}`, {
+
+  // url을 제외한 parameter
+  const params = req.nextUrl.searchParams;
+  params.delete('url');
+
+  const res = await fetch(`${BASE_URL}${url}?${params.toString()}`, {
     method: 'GET',
     headers: {
       'Content-Type': req.headers.get('Content-Type') ?? 'application/json',
@@ -21,7 +26,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url');
-  const { bodyData } = await req.json();
+  const bodyData = await req.json();
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'POST',
     headers: {
@@ -38,7 +43,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url');
-  const { bodyData } = await req.json();
+  const bodyData = await req.json();
   const res = await fetch(`${BASE_URL}${url}`, {
     method: 'PUT',
     headers: {
@@ -55,7 +60,11 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url');
-  const res = await fetch(`${BASE_URL}${url}`, {
+
+  const params = req.nextUrl.searchParams;
+  params.delete('url');
+
+  const res = await fetch(`${BASE_URL}${url}?${params.toString()}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': req.headers.get('Content-Type') ?? 'application/json',

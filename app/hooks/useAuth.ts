@@ -29,7 +29,6 @@ export default function useAuth() {
             return res;
         } catch (error) {
             errorToast(error as string)
-            console.error('Login Error: ', error);
             throw error;
         }
     }
@@ -44,7 +43,6 @@ export default function useAuth() {
             return Boolean(res.status === 200)
         } catch (error) {
             errorToast(error as string)
-            console.error('Check Session Error: ', error);
             throw error;
         }
     }
