@@ -29,20 +29,22 @@ export default function ExchangePanel() {
     const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
     const [selectedCurrency, setSelectedCurrency] = useState<Currency>('USD');
     const [inputAmount, setInputAmount] = useState<number>(0);
+    const [isOrderStart, setIsOrderStart] = useState<boolean>(false);
+    const [inputAmountError, setInputAmountError] = useState<string | undefined>(undefined);
+    const [krwAmountError, setKrwAmountError] = useState<string | undefined>(undefined);
     const [quote, setQuote] = useState<Quote>({
         krwAmount: 0,
         appliedRate: 0,
     });
-    const [isOrderStart, setIsOrderStart] = useState<boolean>(false);
-    const [inputAmountError, setInputAmountError] = useState<string | undefined>(undefined);
-    const [krwAmountError, setKrwAmountError] = useState<string | undefined>(undefined);
 
     const baseCurrency = 'KRW'
     const enabledExchangeCurrencyList = useMemo(() => Object.values(CurrencyEnum).filter((currency) => baseCurrency !== currency), [])
     const selectedCurrencyWallet = useMemo(() => walletData?.wallets.find((wallet) => wallet.currency === selectedCurrency), [selectedCurrency, walletData])
     const krwWallet = useMemo(() => walletData?.wallets.find((wallet) => wallet.currency === 'KRW'), [walletData])
     const selectedCurrencyExchangeRate: ExchangeRate | undefined = useMemo(() => exchangeRateData?.find((rate) => rate.currency === selectedCurrency), [selectedCurrency, exchangeRateData]);
+    const isOrderDisabled = useMemo(() => isOrderStart || inputAmount === 0 || Boolean(inputAmountError) || Boolean(krwAmountError), [isOrderStart, inputAmount, inputAmountError, krwAmountError])
 
+    // 통화 선택
     const SelectedCurrencyComponent = useMemo(() => {
         return (
             <div className='flex gap-1.5'>
@@ -55,6 +57,7 @@ export default function ExchangePanel() {
         )
     }, [selectedCurrency, enabledExchangeCurrencyList])
 
+    // 통화 선택 드롭다운 아이템 리스트
     const DropdownItemList = useMemo(() => {
         return enabledExchangeCurrencyList.map((currency) => (
             <div key={currency} className="flex items-center gap-2 cursor-pointer text-[12px] font-normal">
@@ -66,6 +69,18 @@ export default function ExchangePanel() {
             </div>
         ))
     }, [enabledExchangeCurrencyList])
+
+    // 탭 변경 핸들러
+    const handleTabChange = useCallback((tab: string) => {
+        setInputAmountError(undefined)
+        setKrwAmountError(undefined)
+        setInputAmount(0)
+        setQuote({
+            krwAmount: 0,
+            appliedRate: selectedCurrencyExchangeRate?.rate ?? 0,
+        });
+        setActiveTab(tab as 'buy' | 'sell')
+    }, [])
 
     // 견적 요청 debounce
     useEffect(() => {
@@ -98,6 +113,7 @@ export default function ExchangePanel() {
         if (!selectedCurrencyExchangeRate || !quote?.appliedRate) return
 
         if (selectedCurrencyExchangeRate?.rate !== quote?.appliedRate) {
+            console.log('견적요청시 - 환율정보 다를 경우 갱신')
             refetchExchangeRate()
         }
     }, [quote])
@@ -107,6 +123,7 @@ export default function ExchangePanel() {
         if (!selectedCurrencyExchangeRate || !quote?.appliedRate) return
 
         if (selectedCurrencyExchangeRate?.rate !== quote?.appliedRate) {
+            console.log('환율정보 갱신시 - 견적 상 환율정보 다를 경우 갱신')
             getQuote({
                 fromCurrency: activeTab === 'buy' ? baseCurrency : selectedCurrency,
                 toCurrency: activeTab === 'buy' ? selectedCurrency : baseCurrency,
@@ -120,6 +137,8 @@ export default function ExchangePanel() {
     // 주문 요청
     const handleOrder = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (isOrderDisabled) return
 
         setIsOrderStart(true)
 
@@ -147,7 +166,7 @@ export default function ExchangePanel() {
         } finally {
             setIsOrderStart(false)
         }
-    }, [order, inputAmount, selectedCurrency, exchangeRateData, refetchWallet, setQuote])
+    }, [order, inputAmount, selectedCurrency, selectedCurrencyExchangeRate, quote, activeTab, refetchWallet, isOrderDisabled])
 
     // 탭, 통화 변경 시 초기화
     useEffect(() => {
@@ -183,7 +202,7 @@ export default function ExchangePanel() {
                         { label: '팔래요', value: 'sell', color: 'var(--color-main-blue)' },
                     ]}
                     activeTab={activeTab}
-                    onTabChange={(tab) => { setActiveTab(tab as 'buy' | 'sell') }}
+                    onTabChange={handleTabChange}
                 />
                 <SuffixInput
                     id="input-amount"
@@ -215,7 +234,7 @@ export default function ExchangePanel() {
                         {`1 ${selectedCurrency} = ${formatNumber(normalizeCurrency(Boolean(quote?.appliedRate) ? quote?.appliedRate : selectedCurrencyExchangeRate?.rate, selectedCurrency))} ${baseCurrency}`}
                     </P>
                 </div>
-                <Button type="submit" className="w-full" disabled={isOrderStart || inputAmount === 0 || Boolean(inputAmountError) || Boolean(krwAmountError)} textClassName="text-md font-semibold text-white">
+                <Button type="submit" className="w-full" disabled={isOrderDisabled} textClassName="text-md font-semibold text-white">
                     환전하기
                 </Button>
             </form>

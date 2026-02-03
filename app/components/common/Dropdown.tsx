@@ -52,7 +52,7 @@ export default function Dropdown(props: DropdownProps) {
         <div ref={containerRef} className='relative select-none'>
             <div className="flex items-center gap-2 cursor-pointer" onClick={handleToggle}>
                 {triggerComponent}
-                <div className={`${isOpen ? `rotate-180` : ''} duration-300`}>
+                <div className={`${isOpen ? `` : 'rotate-180'} duration-300`}>
                     {ArrowIcon}
                 </div>
             </div>

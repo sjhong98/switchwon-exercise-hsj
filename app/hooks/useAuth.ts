@@ -2,8 +2,8 @@
 
 import { useCookies } from "react-cookie";
 
-import useApi, { ApiError, ApiResponse } from "./useApi";
 import { errorToast } from "../lib/toast";
+import useApi from "./useApi";
 
 interface LoginResponse {
     data: {
@@ -26,7 +26,11 @@ export default function useAuth() {
                 method: 'POST',
                 body: {}
             })
-            setCookie('accessToken', res.data.data.token)
+            setCookie('accessToken', res.data.data.token, {
+                path: '/',
+                secure: true,
+                sameSite: 'strict',
+            })
             return res;
         } catch (error) {
             console.error(error)

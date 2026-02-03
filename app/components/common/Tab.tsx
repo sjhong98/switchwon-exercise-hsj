@@ -25,6 +25,7 @@ export default function Tab(props: TabProps) {
                 {tabs.map((tab) => (
                     <button
                         key={tab.value}
+                        type="button"
                         className='w-full p-2 rounded-[16px] bg-gray-200 bg-transparent cursor-pointer '
                         style={{ color: tab.color }}
                         onClick={() => onTabChange(tab.value)}

@@ -38,12 +38,13 @@ export default function useApi() {
                 },
             });
 
-            const result = await res.json();
+            let result = await res.json();
 
             if(!res.ok) {
                 if (res.status === 401) router.push('/login')
+                const errorMessage = Object.values(result?.data ?? {})?.[0] ?? result?.message ?? '요청 중 오류가 발생했습니다.'
                 
-                const err = new Error(result?.message ?? 'API ERROR') as ApiError;
+                const err = new Error(errorMessage) as ApiError;
                 err.status = res.status;
                 err.data = result.data;
                 throw err;
@@ -56,7 +57,7 @@ export default function useApi() {
         } catch (error) {
             const err = error as ApiError;
             console.error(err)
-            errorToast('요청 중 오류가 발생했습니다.');
+            errorToast(err.message ?? '요청 중 오류가 발생했습니다.');
             throw err;
         }   
     }
