@@ -141,8 +141,8 @@ app/
 
 ### 기능 설명
 
-1. 인증
-- useAuth 훅에 로직 정리
+**1. 인증**
+**useAuth** 훅에 로직 정리
 
     1-1) 로그인 / 회원가입 (signIn)
     - 이메일 주소로 인증 요청
@@ -159,21 +159,21 @@ app/
     - accessToken을 삭제하고 로그인 페이지로 이동
 
     
-2. 실시간 환율 조회
-- useExchangeRate 훅에 로직 정리
+**2. 실시간 환율 조회**
+**useExchangeRate** 훅에 로직 정리
 
     2-1) 실시간 환율 조회
     - Tanstack Query로 실시간 환율 정보 패칭 및 관리
     - 캐싱 기간 및 리패칭 인터벌 1분으로 설정하여, 1분 간격으로 갱신
 
-3. 내 지갑 확인
-- useWallet 훅에 로직 정리
+**3. 내 지갑 확인**
+**useWallet** 훅에 로직 정리
 
     3-1) 내 지갑 조회
     - Tanstack Query로 내 지갑 정보 패칭 및 관리
 
-4. 환전
-- useExchange 훅에 로직 정리
+**4. 환전**
+**useExchange** 훅에 로직 정리
 
     4-1) 주문 (order)
     - /orders API로 주문 요청
