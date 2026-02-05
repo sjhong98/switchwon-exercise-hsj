@@ -11,6 +11,9 @@
 
 ```bash
 git clone https://github.com/sjhong98/switchwon-exercise-hsj.git
+```
+
+```bash
 cd switchwon-exercise-hsj
 ```
 
