@@ -1,4 +1,4 @@
-# Switchwon-exercise
+# Current-App
 
 ### Prerequisites
 
@@ -10,11 +10,11 @@
 ### 1. Repository Clone
 
 ```bash
-git clone https://github.com/sjhong98/switchwon-exercise-hsj.git
+git clone https://github.com/sjhong98/current-change
 ```
 
 ```bash
-cd switchwon-exercise-hsj
+cd current-change
 ```
 
 ### 2. Install Dependencies
